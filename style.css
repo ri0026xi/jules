@@ -1,0 +1,73 @@
+body {
+    background-color: #333;
+    color: #f0f0f0;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#hero {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+#skills {
+    padding: 30px 20px;
+    text-align: center; /* スキルセクション全体を中央揃え */
+}
+
+#skills ul {
+    list-style-type: none;
+    padding: 0; /* padding-left: 0; と同じ効果 */
+    display: inline-block; /* リスト全体を中央揃えしつつ、アイテムは左揃えに */
+    text-align: left;    /* リストアイテムのテキストを左揃えに */
+}
+
+#skills li {
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    background-color: #444; /* スキルアイテムの背景色 */
+    border-radius: 4px;     /* 角を少し丸める */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* スムーズな変化のためのトランジション */
+}
+
+#skills li:hover {
+    background-color: #555; /* ホバー時の背景色を少し明るく */
+    transform: translateY(-2px); /* 少し上に移動するエフェクト */
+    /* color: #007bff; */ /* アクセントカラーをホバー時の文字色に使う場合の例 */
+}
+
+#contact {
+    padding: 30px 20px;
+    text-align: center; /* コンタクトセクション全体を中央揃え */
+}
+
+h1, h2 {
+    color: #007bff;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px; /* ベースのフォントサイズを少し小さく */
+  }
+
+  #hero {
+    padding: 30px 15px; /* パディングを調整 */
+  }
+
+  #hero h1 {
+    font-size: 2em; /* 見出しのサイズ調整 */
+  }
+
+  #hero p {
+    padding: 0 10px; /* 画面幅いっぱいに広がらないように調整 */
+  }
+
+  #skills h2, #contact h2 {
+    font-size: 1.5em; /* セクションタイトルのサイズ調整 */
+  }
+
+  #skills, #contact {
+    padding: 20px 15px; /* セクションのパディングを調整 */
+  }
+}
