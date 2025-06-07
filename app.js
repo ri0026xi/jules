@@ -103,6 +103,80 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
+    const skillsData = [
+        { name: "Python", icon: "fab fa-python", progress: 90, description: "サーバーサイド開発、データ分析、機械学習など幅広く活用しています。" },
+        { name: "C#", icon: "fas fa-code", progress: 80, description: "WindowsデスクトップアプリやUnityでのゲーム開発経験があります。" },
+        { name: "AWS", icon: "fab fa-aws", progress: 75, description: "EC2, S3, Lambda, RDSなど基本的なサービスを利用したインフラ構築が可能です。" },
+        { name: "IEC 61131-3", icon: "fas fa-cogs", progress: 70, description: "PLCプログラミングにおける国際標準言語での制御ロジック開発経験があります。" }
+    ];
+
+    const skillCardsContainer = document.querySelector('.skill-cards-container');
+
+    function generateSkillCards(skills) {
+        skills.forEach(skill => {
+            const card = document.createElement('div');
+            card.classList.add('skill-card');
+            card.setAttribute('data-progress', skill.progress);
+            card.setAttribute('data-aos', 'fade-up');
+            // data-aos-delay can be added here if staggered animation is desired for dynamic cards
+
+            const skillInfo = document.createElement('div');
+            skillInfo.classList.add('skill-info');
+
+            const icon = document.createElement('i');
+            icon.className = skill.icon; // Assign multiple classes directly
+
+            const span = document.createElement('span');
+            span.textContent = skill.name;
+
+            skillInfo.appendChild(icon);
+            skillInfo.appendChild(span);
+
+            const description = document.createElement('p');
+            description.classList.add('skill-description');
+            description.textContent = skill.description;
+
+            const progressBarContainer = document.createElement('div');
+            progressBarContainer.classList.add('progress-bar-container');
+
+            const progressBar = document.createElement('div');
+            progressBar.classList.add('progress-bar');
+
+            progressBarContainer.appendChild(progressBar);
+
+            card.appendChild(skillInfo);
+            card.appendChild(description); // Add description
+            card.appendChild(progressBarContainer);
+
+            skillCardsContainer.appendChild(card);
+        });
+    }
+
+    if (skillCardsContainer) {
+        generateSkillCards(skillsData);
+    }
+
+    // Re-select skillCards after they are generated
+    const skillCards = document.querySelectorAll('.skill-card');
+
+    skillCards.forEach(card => {
+        const progressBar = card.querySelector('.progress-bar');
+        const progress = card.getAttribute('data-progress');
+
+        if(progressBar) progressBar.style.width = '0%'; // Initial state
+
+        card.addEventListener('mouseenter', () => {
+            if(progressBar) {
+                progressBar.style.width = progress + '%';
+            }
+        });
+
+        card.addEventListener('mouseleave', () => {
+            // Keep progress visible or reset to 0%
+            // progressBar.style.width = '0%';
+        });
+    });
+
     // AOS.jsの初期化
     AOS.init({
         duration: 800, // アニメーションの継続時間 (ミリ秒)
