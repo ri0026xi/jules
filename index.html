@@ -5,27 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>山田太郎 - ポートフォリオ</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header id="hero">
-        <h1>山田太郎</h1>
-        <p>デジタルソリューションを構築するエンジニア</p>
+        <div id="particles-js"></div>
+        <h1 data-aos="fade-in" data-aos-delay="300">山田太郎</h1>
+        <p data-aos="fade-in" data-aos-delay="500"><span id="typed-intro"></span></p>
     </header>
 
-    <section id="skills">
+    <section id="skills" data-aos="fade-up">
         <h2>スキル</h2>
-        <ul>
-            <li>Python</li>
-            <li>C#</li>
-            <li>AWS</li>
-            <li>IEC 61131-3</li>
-        </ul>
+        <div class="skill-cards-container">
+            <div class="skill-card" data-progress="90" data-aos="fade-up" data-aos-delay="100"> <!-- Python -->
+                <div class="skill-info">
+                    <i class="fab fa-python"></i>
+                    <span>Python</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+            <div class="skill-card" data-progress="80" data-aos="fade-up" data-aos-delay="200"> <!-- C# -->
+                <div class="skill-info">
+                    <i class="fas fa-code"></i>
+                    <span>C#</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+            <div class="skill-card" data-progress="75" data-aos="fade-up" data-aos-delay="300"> <!-- AWS -->
+                <div class="skill-info">
+                    <i class="fab fa-aws"></i>
+                    <span>AWS</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+            <div class="skill-card" data-progress="70" data-aos="fade-up" data-aos-delay="400"> <!-- IEC 61131-3 -->
+                <div class="skill-info">
+                    <i class="fas fa-cogs"></i>
+                    <span>IEC 61131-3</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section id="contact">
+    <section id="contact" data-aos="fade-up">
         <h2>コンタクト</h2>
         <p>Email: user@example.com</p>
     </section>
+
+    <footer id="page-footer" data-aos="fade-up">
+        <div class="footer-content">
+            <p class="copyright">&copy; 2023 山田太郎. All Rights Reserved.</p>
+            <ul class="social-links">
+                <li><a href="https://github.com/yourusername" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a></li>
+                <li><a href="https://linkedin.com/in/yourusername" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a></li>
+                <!-- 他のSNSリンクも必要に応じて追加 -->
+            </ul>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
