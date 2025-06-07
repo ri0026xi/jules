@@ -66,6 +66,8 @@ particlesJS("particles-js", {
 
 // Typed.jsの初期化
 document.addEventListener('DOMContentLoaded', function(){
+    let skillCards; // Declare skillCards here
+
     var options = {
         strings: ["デジタルソリューションを構築するエンジニア", "クラウド技術とソフトウェア開発が得意です。", "新しい技術に挑戦し続けます。"], // 表示させたい文字列の配列
         typeSpeed: 50, // タイピング速度 (ミリ秒)
@@ -134,35 +136,45 @@ document.addEventListener('DOMContentLoaded', function(){
 
     if (skillCardsContainer) {
         generateSkillCards(skillsData);
+        // Assign skillCards after they are generated
+        skillCards = document.querySelectorAll('.skill-card');
+
+        skillCards.forEach(card => {
+            const progressBar = card.querySelector('.progress-bar');
+            const progress = card.getAttribute('data-progress');
+
+            if(progressBar) progressBar.style.width = '0%'; // Initial state
+
+            card.addEventListener('mouseenter', () => {
+                if(progressBar) {
+                    progressBar.style.width = progress + '%';
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                // Keep progress visible or reset to 0%
+                // progressBar.style.width = '0%';
+            });
+        });
+
+        // AOS.jsの初期化 - Moved inside the if block to ensure it runs after elements are potentially ready
+        AOS.init({
+            duration: 800, // アニメーションの継続時間 (ミリ秒)
+            easing: 'ease-in-out', // アニメーションのイージング
+            once: true, // アニメーションを一度だけ実行する
+            mirror: false, // 要素が画面外に出たときにアニメーションをリセットするか (once:true の場合は影響なし)
+            anchorPlacement: 'top-bottom', // アニメーション開始のトリガー位置
+        });
+    } else {
+        // Fallback AOS initialization if skillCardsContainer does not exist,
+        // though most AOS elements are likely within sections that would be affected.
+        // Consider if AOS elements outside skill cards need initialization regardless.
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            mirror: false,
+            anchorPlacement: 'top-bottom',
+        });
     }
-
-    // Re-select skillCards after they are generated
-    const skillCards = document.querySelectorAll('.skill-card');
-
-    skillCards.forEach(card => {
-        const progressBar = card.querySelector('.progress-bar');
-        const progress = card.getAttribute('data-progress');
-
-        if(progressBar) progressBar.style.width = '0%'; // Initial state
-
-        card.addEventListener('mouseenter', () => {
-            if(progressBar) {
-                progressBar.style.width = progress + '%';
-            }
-        });
-
-        card.addEventListener('mouseleave', () => {
-            // Keep progress visible or reset to 0%
-            // progressBar.style.width = '0%';
-        });
-    });
-
-    // AOS.jsの初期化
-    AOS.init({
-        duration: 800, // アニメーションの継続時間 (ミリ秒)
-        easing: 'ease-in-out', // アニメーションのイージング
-        once: true, // アニメーションを一度だけ実行する
-        mirror: false, // 要素が画面外に出たときにアニメーションをリセットするか (once:true の場合は影響なし)
-        anchorPlacement: 'top-bottom', // アニメーション開始のトリガー位置
-    });
 });
