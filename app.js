@@ -80,28 +80,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     var typed = new Typed("#typed-intro", options);
 
-    const skillCards = document.querySelectorAll('.skill-card');
-
-    skillCards.forEach(card => {
-        const progressBar = card.querySelector('.progress-bar');
-        const progress = card.getAttribute('data-progress');
-
-        // 初期状態ではプログレスバーの幅を0に (CSSでも設定可能だが念のため)
-        if(progressBar) progressBar.style.width = '0%';
-
-        card.addEventListener('mouseenter', () => {
-            if(progressBar) {
-                progressBar.style.width = progress + '%';
-            }
-        });
-
-        card.addEventListener('mouseleave', () => {
-            if(progressBar) {
-                // ホバーが外れたら0に戻すか、そのままにするか選択
-                // progressBar.style.width = '0%';
-            }
-        });
-    });
+    // Obsolete skill card selection removed.
+    // The event listeners will be added after dynamic generation.
 
     const skillsData = [
         { name: "Python", icon: "fab fa-python", progress: 90, description: "サーバーサイド開発、データ分析、機械学習など幅広く活用しています。" },
