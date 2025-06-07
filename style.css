@@ -139,9 +139,37 @@ body {
     transition: width 0.5s ease-out; /* 幅のアニメーション */
 }
 
+.skill-description {
+    font-size: 0.9em; /* Slightly smaller than skill name */
+    color: #cccccc;   /* Light gray, slightly muted */
+    margin-bottom: 25px; /* Space above the progress bar area and skill-info */
+    line-height: 1.4; /* Improve readability */
+    /* Ensure it's above the progress bar container if there are layout issues. */
+    position: relative;
+    z-index: 1;
+}
+
 #contact {
     padding: 30px 20px;
     text-align: center; /* コンタクトセクション全体を中央揃え */
+}
+
+#contact p {
+    margin: 10px 0; /* Adjust vertical spacing for paragraphs */
+    font-size: 1.1em; /* Slightly larger font for contact info */
+    line-height: 1.6; /* Improve line spacing */
+}
+
+#contact a {
+    color: #0099ff; /* A slightly different blue for links in contact */
+    text-decoration: none;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+#contact a:hover,
+#contact a:focus {
+    color: #33ceff; /* Lighter blue on hover/focus */
+    text-decoration: underline; /* Underline on hover/focus for clarity */
 }
 
 h1, h2 {
