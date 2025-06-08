@@ -1,3 +1,84 @@
+/* --- GSAP Animation Initial States --- */
+/* Hero Section Elements */
+#hero h1,
+#hero p { /* Typed.jsのコンテナを想定 */
+    opacity: 0;
+    transform: translateY(30px);
+    visibility: hidden; /* GSAPが 'autoAlpha' で制御できるように */
+}
+
+/* Section Titles */
+#skills h2,
+#contact h2 {
+    opacity: 0;
+    transform: translateY(30px);
+    visibility: hidden;
+}
+
+/* Skill Cards */
+/* .skill-card の初期状態はGSAP側で設定するか、
+   またはここに定義して、既存の .skill-card スタイルでの transform や opacity の指定を削除/上書きします。
+   ここではGSAP側で制御することを想定し、コメントアウトしておきます。
+   もしここに定義する場合は、既存の .skill-card スタイルとの競合を避けるため、
+   既存の transform, opacity, visibility を削除する必要があります。 */
+/*
+.skill-card {
+    opacity: 0;
+    transform: translateY(30px);
+    visibility: hidden;
+}
+*/
+
+/* Footer Elements */
+#page-footer .footer-content > * { /* フッター内の直接の子要素を対象 */
+    opacity: 0;
+    transform: translateY(30px);
+    visibility: hidden;
+}
+/* --- ここまでGSAP初期状態 --- */
+
+/* --- プログレスバースタイル --- */
+#progress-bar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px; /* プログレスバーの高さ */
+    background-color: rgba(255, 255, 255, 0.1); /* バーの背景色 */
+    z-index: 2000; /* 最前面に */
+    visibility: hidden; /* 初期状態は非表示 */
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s;
+}
+
+#progress-bar-indicator {
+    width: 0%; /* 初期幅は0% */
+    height: 100%;
+    background-color: #007bff; /* アクセントカラー */
+    /* transition: width 0.1s linear; GSAPで制御するので不要 */
+}
+
+#progress-bar-container.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+/* --- スキルセクションピン留め用スタイル --- */
+#skills {
+    position: relative; /* ピン留めの基準になることがある */
+    z-index: 1; /* 他の要素との重なり順を意識 */
+}
+
+#skills h2.pinned-title {
+    /* ピン留めされた時のスタイル (必要に応じて) */
+    /* 例: 背景色を変える、影をつけるなど */
+    /* background-color: #222; */
+    /* padding-bottom: 10px; */
+    /* box-shadow: 0 2px 5px rgba(0,0,0,0.2); */
+}
+
+
 body {
     background-color: #333;
     color: #f0f0f0;
@@ -13,6 +94,7 @@ body {
     overflow: hidden; /* はみ出したパーティクルを隠す */
     min-height: 80vh; /* ビューポートの高さの80%を最小の高さとする */
     display: flex;
+    perspective: 1000px; /* 3Dエフェクトのための視点 */
     flex-direction: column;
     justify-content: center;
     align-items: center; /* 水平方向の中央揃えもflexで統一 */
@@ -79,7 +161,8 @@ body {
     position: relative;
     overflow: hidden; /* プログレスバーがはみ出さないように */
     text-align: left;
-    transition: transform 0.3s ease, background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease; /* トランジション追加 */
+    /* transform の transition はGSAPと競合する可能性があるため削除 */
+    transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
 
     /* ガラスモーフィズムスタイル */
     background-color: rgba(255, 255, 255, 0.05); /* 半透明の背景 (ダークテーマに合わせて調整) */
@@ -271,12 +354,495 @@ html { /* または body や特定のスクロール可能な要素 */
     margin: 0 10px;
 }
 
-.social-links a {
-    color: #ccc; /* アイコンのデフォルト色 */
-    font-size: 1.8em; /* アイコンサイズ */
-    transition: color 0.3s ease;
+.social-links a, .contact-social-links a { /* 両方のセレクタをグループ化 */
+    color: #ccc;
+    font-size: 1.8em; /* フッターのアイコンサイズを基準に */
+    transition: color 0.3s ease, transform 0.3s ease; /* transformもトランジション対象に */
+    display: inline-block; /* transformを適用するため */
 }
 
-.social-links a:hover {
+.contact-social-links a { /* コンタクトセクションのリンクはマージンとサイズを調整 */
+    margin: 0 12px; /* 少し調整 */
+    font-size: 2em; /* 少し大きめでも良い */
+}
+
+
+.social-links a:hover, .contact-social-links a:hover {
     color: #007bff; /* ホバー時の色 (アクセントカラー) */
+    transform: translateY(-3px); /* 少し上に移動 */
+}
+
+/* コンタクトセクションの個別スタイルで回転などを残したい場合は別途定義 */
+/*
+.contact-social-links a:hover i {
+    transform: scale(1.2) rotate(5deg);
+}
+*/
+
+/* --- スキルカードハイライトスタイル --- */
+.skill-card.highlighted {
+    opacity: 1 !important;
+    border: 1px solid #00ffff;
+    transform: translateY(-5px) scale(1.03); /* 少し拡大して目立たせる */
+    box-shadow: 0 8px 40px rgba(0, 255, 255, 0.3); /* より目立つ影 */
+}
+
+.skill-card.dimmed {
+    opacity: 0.5 !important; /* 透明度を下げる */
+    filter: grayscale(50%); /* 少しグレーアウトする */
+    transform: scale(0.95); /* 少し縮小する */
+}
+
+
+/* --- モーダルスタイル --- */
+.modal {
+    display: none; /* 初期状態は非表示 (JavaScriptで制御) */
+    position: fixed; /* 画面に固定 */
+    z-index: 1000; /* 他の要素より前面に */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* コンテンツが多い場合にスクロール可能に */
+    background-color: rgba(0, 0, 0, 0.7); /* 半透明の黒背景 */
+    animation: fadeIn 0.3s ease-out; /* フェードインアニメーション */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background-color: #333; /* ダークテーマに合わせた背景色 */
+    color: #f0f0f0;
+    margin: 10% auto; /* 上下10%、左右中央に配置 */
+    padding: 30px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    width: 80%; /* モーダルの幅 */
+    max-width: 600px; /* 最大幅 */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    animation: slideIn 0.3s ease-out; /* スライドインアニメーション */
+
+    /* ガラスモーフィズムスタイル適用 */
+    background-color: rgba(60, 60, 60, 0.3); /* モーダル背景より少し濃い半透明、フォームよりは薄めに調整 */
+    border: 1px solid rgba(255, 255, 255, 0.15); /* フォームより少し境界を明確に */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25); /* フォームより少し影を濃く */
+    backdrop-filter: blur(10px); /* 強めのぼかし */
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 10px; /* 角丸をフォームと合わせる */
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+
+.modal-close-button:hover,
+.modal-close-button:focus {
+    color: #fff; /* ホバー/フォーカス時により明るく */
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#modal-skill-name {
+    color: #00aaff; /* スキル名をアクセントカラーに */
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #444; /* 区切り線 */
+    padding-bottom: 15px;
+}
+
+#modal-skill-details {
+    font-size: 1em;
+    line-height: 1.6;
+    color: #ddd; /* 詳細テキストの色を調整 */
+}
+
+/* --- SVGラインコンテナスタイル --- */
+#skill-lines-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* スキルカードの背面 */
+    pointer-events: none; /* マウスイベントを透過させる */
+    overflow: visible; /* SVG要素がはみ出す場合も表示 */
+}
+
+/* --- スキルリンク線の基本スタイル --- */
+.skill-link-line {
+    stroke: rgba(0, 123, 255, 0.4); /* 半透明のアクセントカラー (少し濃く) */
+    stroke-width: 2px;
+    stroke-linecap: round;
+    /* stroke-dashoffset のトランジションを追加 */
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.47, 0, 0.745, 0.715), /* 伸びるアニメーション */
+                stroke-opacity 0.5s ease,
+                opacity 0.5s ease;
+    opacity: 0.7; /* 初期透明度を少し上げておく */
+    /* stroke-dasharray はJSで動的に設定 */
+    /* stroke-dashoffset はJSで動的に設定 (初期は線長と同じ) */
+}
+
+/* アニメーションで線を表示するためのクラス */
+.skill-link-line.visible {
+    stroke-dashoffset: 0 !important; /* 線を表示 (重要度を上げる) */
+    opacity: 0.7; /* 表示時の基本透明度 */
+}
+
+/* 光るアニメーション */
+@keyframes glowing-line-anim {
+    0% {
+        stroke-opacity: 0.7;
+        stroke: rgba(0, 150, 255, 0.7);
+    }
+    50% {
+        stroke-opacity: 1;
+        stroke: rgba(100, 200, 255, 1); /* 明るい色 */
+        /* stroke-width: 2.5px; */ /* 太さを少し変えるのもあり */
+    }
+    100% {
+        stroke-opacity: 0.7;
+        stroke: rgba(0, 150, 255, 0.7);
+    }
+}
+
+.skill-link-line.glowing {
+    animation: glowing-line-anim 1.5s infinite ease-in-out;
+}
+
+/* --- コンタクトセクションスタイル --- */
+#contact {
+    padding: 50px 20px; /* 上下パディングを増やす */
+    text-align: center;
+    background-color: #2a2a2a; /* 他のセクションと少し異なる背景色 */
+    position: relative; /* particles.jsを適用する場合に備える */
+    overflow: hidden; /* particles.jsを適用する場合に備える */
+}
+
+#contact h2 {
+    margin-bottom: 40px; /* タイトルとフォームの間のマージン */
+}
+
+/* --- コンタクトフォームスタイル --- */
+#contact-form {
+    max-width: 600px;
+    margin: 0 auto 40px auto; /* フォームの下にマージン追加 */
+    text-align: left;
+    padding: 30px; /* ガラスモーフィズムのためのパディング */
+    border-radius: 10px; /* 角丸 */
+
+    /* ガラスモーフィズムスタイル */
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15); /* スキルカードより少し強めの影 */
+    backdrop-filter: blur(6px); /* スキルカードより少し強めのぼかし */
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+#contact-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #f0f0f0;
+    font-weight: bold;
+}
+
+#contact-form input[type="text"],
+#contact-form input[type="email"],
+#contact-form textarea {
+    width: calc(100% - 20px); /* パディングを考慮 */
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #3f3f3f;
+    color: #f0f0f0;
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#contact-form input[type="text"]:focus,
+#contact-form input[type="email"]:focus,
+#contact-form textarea:focus {
+    border-color: #007bff; /* アクセントカラー */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+#contact-form textarea {
+    resize: vertical; /* 縦方向のみリサイズ可能 */
+}
+
+.submit-button {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 5px;
+    border: none;
+    background-color: #007bff; /* アクセントカラー */
+    color: #ffffff;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-transform: uppercase;
+}
+
+.submit-button:hover {
+    background-color: #0056b3; /* 少し濃いアクセントカラー */
+    transform: translateY(-2px);
+}
+
+.submit-button:active {
+    background-color: #004085; /* さらに濃いアクセントカラー */
+    transform: translateY(0);
+}
+
+.submit-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* --- フォームステータス表示スタイル --- */
+#form-status {
+    display: none; /* 初期状態は非表示 */
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    text-align: center;
+}
+
+#form-status.success {
+    background-color: rgba(40, 167, 69, 0.1); /* Bootstrap success green, semi-transparent */
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.5);
+    display: block;
+}
+
+#form-status.error {
+    background-color: rgba(220, 53, 69, 0.1); /* Bootstrap danger red, semi-transparent */
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.5);
+    display: block;
+}
+
+/* --- コンタクトSNSリンクエリアスタイル --- */
+.contact-social-links {
+    text-align: center;
+    margin-top: 30px; /* フォームステータスとの間 */
+}
+
+/* .contact-social-links i の個別スタイルは上記に統合、または微調整 */
+.contact-social-links i {
+    /* font-sizeは .contact-social-links a で設定済み */
+}
+
+
+/* 既存の #contact p, #contact a スタイルを上書きまたは調整 */
+#contact > p { /* 以前のpタグがあった場合のため */
+    display: none; /* 新しいフォームで置き換えるため非表示に */
+}
+
+/* --- ページトップへ戻るボタン --- */
+#to-top-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background-color: #007bff; /* アクセントカラー */
+    color: #ffffff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 50px; /* アイコンを中央に */
+    font-size: 1.5em; /* アイコンサイズ */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 1500; /* モーダルよりは下、プログレスバーよりは下など調整 */
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+}
+
+#to-top-button:hover {
+    background-color: #0056b3; /* 少し濃いアクセントカラー */
+    transform: translateY(15px) scale(1.05); /* 少し上に移動して拡大 */
+}
+
+#to-top-button.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* --- モバイルレスポンシブ対応 --- */
+
+/* 共通モバイル調整 (767px以下) */
+@media (max-width: 767px) {
+    /* セクションパディング調整 */
+    #hero {
+        padding: 30px 15px;
+        min-height: 70vh; /* 少し高さを抑える */
+    }
+    #skills, #contact, #page-footer {
+        padding: 30px 15px; /* 上下パディングを少し減らす */
+    }
+
+    /* ヒーローセクション フォントサイズ調整 */
+    #hero h1 {
+        font-size: 2.8em; /* PCより小さく */
+    }
+    #hero p {
+        font-size: 1em; /* PCより小さく */
+    }
+
+    /* スキルセクション タイトル調整 */
+    #skills h2 {
+        font-size: 1.8em; /* PCより小さく */
+        margin-bottom: 25px; /* マージン調整 */
+    }
+    #contact h2 { /* コンタクトタイトルも同様に */
+        font-size: 1.8em;
+        margin-bottom: 30px;
+    }
+
+    /* スキルカードは既に1列表示に設定済み (.skill-card width: calc(100% - 40px)) */
+    .skill-card {
+        width: calc(100% - 30px); /* パディングを考慮して調整 */
+        min-width: unset; /* 最小幅をリセット */
+    }
+
+
+    /* コンタクトフォーム調整 */
+    #contact-form {
+        padding: 20px; /* パディングを少し減らす */
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    #contact-form label {
+        font-size: 0.95em;
+        margin-bottom: 6px;
+    }
+    #contact-form input[type="text"],
+    #contact-form input[type="email"],
+    #contact-form textarea {
+        padding: 10px;
+        font-size: 0.95em;
+    }
+    .submit-button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+
+    /* フッター調整 */
+    .footer-content {
+        padding: 0 10px;
+    }
+    .social-links a, .contact-social-links a {
+        font-size: 1.6em; /* フッターアイコン少し小さく */
+    }
+    .contact-social-links a {
+        font-size: 1.8em; /* コンタクトのアイコンも少し調整 */
+        margin: 0 10px;
+    }
+
+    /* ページトップボタンの位置調整 */
+    #to-top-button {
+        width: 45px;
+        height: 45px;
+        line-height: 45px;
+        font-size: 1.3em;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    /* プログレスバーの高さ調整 */
+    #progress-bar-container {
+        height: 4px;
+    }
+}
+
+/* 小型モバイル向け調整 (480px以下) */
+@media (max-width: 480px) {
+    body {
+        font-size: 13px; /* 全体のフォントサイズを少し下げる */
+    }
+    #hero h1 {
+        font-size: 2.2em; /* さらに小さく */
+    }
+    #hero p {
+        font-size: 0.9em; /* さらに小さく */
+    }
+    #skills h2, #contact h2 {
+        font-size: 1.6em; /* さらに小さく */
+    }
+
+    .skill-card {
+        padding: 15px;
+    }
+    .skill-info i {
+        font-size: 1.3em;
+    }
+    .skill-info span {
+        font-size: 1em;
+    }
+    .skill-description {
+        font-size: 0.85em;
+        margin-bottom: 20px;
+    }
+
+    #contact-form input[type="text"],
+    #contact-form input[type="email"],
+    #contact-form textarea {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+    .submit-button {
+        width: 100%; /* ボタン幅を100%に */
+        padding: 12px 0;
+    }
+    #form-status {
+        font-size: 0.9em;
+    }
+
+    #page-footer .copyright {
+        font-size: 0.8em;
+    }
+    .social-links a, .contact-social-links a {
+        font-size: 1.5em;
+    }
+    .contact-social-links a {
+        font-size: 1.7em;
+    }
+
+}
+
+/* タブレット（ポートレート）向け調整 */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    #hero p {
+        max-width: 600px; /* テキストが広がりすぎないように */
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #contact-form {
+        max-width: 500px; /* フォームも少し幅を抑える */
+    }
 }

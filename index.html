@@ -6,31 +6,71 @@
     <title>山田太郎 - ポートフォリオ</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="progress-bar-container">
+        <div id="progress-bar-indicator"></div>
+    </div>
+    <div id="skill-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="modal-close-button">&times;</span>
+            <h3 id="modal-skill-name"></h3>
+            <p id="modal-skill-details"></p>
+        </div>
+    </div>
+
     <header id="hero">
         <div id="particles-js"></div>
-        <h1 data-aos="fade-in" data-aos-delay="300">山田太郎</h1>
-        <p data-aos="fade-in" data-aos-delay="500"><span id="typed-intro"></span></p>
+        <h1>山田太郎</h1>
+        <p><span id="typed-intro"></span></p>
     </header>
 
-    <section id="skills" data-aos="fade-up">
+    <section id="skills">
         <h2>スキル</h2>
         <div class="skill-cards-container">
             <!-- Skill cards will be dynamically inserted here by app.js -->
         </div>
     </section>
 
-    <section id="contact" data-aos="fade-up">
+    <section id="contact">
         <h2>コンタクト</h2>
+        <!--
         <p>Email: <a href="mailto:user@example.com">user@example.com</a></p>
         <p>LinkedIn: <a href="#" target="_blank">yourusername</a></p>
         <p>GitHub: <a href="#" target="_blank">yourusername</a></p>
+        -->
+        <form id="contact-form" action="YOUR_FORMSPREE_ENDPOINT_OR_OTHER" method="POST">
+            <div class="form-group">
+                <label for="name">お名前</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">メールアドレス</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="subject">件名</label>
+                <input type="text" id="subject" name="subject" required>
+            </div>
+            <div class="form-group">
+                <label for="message">メッセージ</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="submit-button">送信</button>
+        </form>
+        <div id="form-status"></div> <!-- 送信状態表示用 -->
+
+        <div class="contact-social-links">
+            <a href="https://github.com/yourusername" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/yourusername" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="mailto:user@example.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+            <!-- 他のSNSリンクも必要に応じて追加 -->
+        </div>
     </section>
 
-    <footer id="page-footer" data-aos="fade-up">
+    <footer id="page-footer">
         <div class="footer-content">
             <p class="copyright">&copy; 2023 山田太郎. All Rights Reserved.</p>
             <ul class="social-links">
@@ -41,9 +81,15 @@
         </div>
     </footer>
 
+    <a href="#" id="to-top-button" class="to-top-button" aria-label="ページトップへ戻る">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> -->
     <script src="app.js"></script>
 </body>
 </html>
