@@ -382,18 +382,18 @@ document.addEventListener('DOMContentLoaded', function(){
         gsap.from("#hero h1", {
             duration: 0.8,
             y: 50,
-            autoAlpha: 1, // opacity: 1, visibility: 'visible' にアニメーション
+            autoAlpha: 1,
             ease: "power2.out",
             delay: 0.2,
-            clearProps: "transform" // アニメーション後にtransformプロパティをクリアしてCSSに戻す
+            onComplete: () => gsap.set("#hero h1", { clearProps: "transform" }) // autoAlphaで設定されたopacity/visibilityは維持
         });
         gsap.from("#hero p", {
             duration: 0.8,
             y: 50,
             autoAlpha: 1,
             ease: "power2.out",
-            delay: 0.5, // h1より少し遅れて開始
-            clearProps: "transform"
+            delay: 0.5,
+            onComplete: () => gsap.set("#hero p", { clearProps: "transform" })
         });
 
         // Particles.js background scroll animation - これも全デバイス共通だが、値はmatchMediaで調整可能
@@ -519,23 +519,31 @@ document.addEventListener('DOMContentLoaded', function(){
             }
 
             // Skill Lines SVG Container and Listeners (Desktop only) - 全て削除またはコメントアウト
-            // if (skillCardsContainer && !document.getElementById('skill-lines-svg')) {
-            //     svgLinesContainer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            //     svgLinesContainer.setAttribute("id", "skill-lines-svg");
-            //     if (skillCardsContainer.parentNode) {
-            //         skillCardsContainer.parentNode.insertBefore(svgLinesContainer, skillCardsContainer);
-            //     }
-            // }
-            // if (skillCards) {
-            //     skillCards.forEach(card => {
-            //         card.addEventListener('mouseenter', () => {
-            //             // ... ライン描画関連削除 ...
-            //         });
-            //         card.addEventListener('mouseleave', () => {
-            //             // ... ライン描画関連削除 ...
-            //         });
-            //     });
-            // }
+
+            // Revised Skill Card Hover Effect (Desktop only)
+            if (skillCards) {
+                skillCards.forEach(card => {
+                    card.addEventListener('mouseenter', (e) => {
+                        const hoveredCard = e.currentTarget;
+                        skillCards.forEach(sc => {
+                            if (sc === hoveredCard) {
+                                sc.classList.add('highlighted');
+                                sc.classList.remove('dimmed');
+                            } else {
+                                sc.classList.add('dimmed');
+                                sc.classList.remove('highlighted');
+                            }
+                        });
+                    });
+
+                    card.addEventListener('mouseleave', (e) => {
+                        skillCards.forEach(sc => {
+                            sc.classList.remove('highlighted');
+                            sc.classList.remove('dimmed');
+                        });
+                    });
+                });
+            }
         },
 
         // Mobile (max-width: 767px)
