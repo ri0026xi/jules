@@ -107,9 +107,9 @@ document.addEventListener('DOMContentLoaded', function(){
     ];
 
     const skillCardsContainer = document.querySelector('.skill-cards-container');
-    let svgLinesContainer; // SVGコンテナを保持する変数
+    // let svgLinesContainer; // SVGコンテナを保持する変数 - ラインアニメーション削除のためコメントアウト
 
-    // Debounce関数
+    // Debounce関数 - ラインアニメーション以外でも使う可能性があるので残す
     function debounce(func, wait, immediate) {
         var timeout;
         return function() {
@@ -125,92 +125,8 @@ document.addEventListener('DOMContentLoaded', function(){
         };
     };
 
-    // ヘルパー関数：カードの中心座標を取得
-    function getCardCenterPosition(cardElement, svgContainer) {
-        const cardRect = cardElement.getBoundingClientRect();
-        const svgRect = svgContainer.getBoundingClientRect();
-        // スキルカードコンテナのスクロール位置を考慮
-        const scrollTop = skillCardsContainer.scrollTop;
-        const scrollLeft = skillCardsContainer.scrollLeft;
-
-        return {
-            x: cardRect.left + cardRect.width / 2 - svgRect.left + scrollLeft,
-            y: cardRect.top + cardRect.height / 2 - svgRect.top + scrollTop
-        };
-    }
-
-    let drawnLines = new Set(); // 既に描画した線のペアを記録 (例: "id1-id2")
-
-    function drawSkillLines(activeCardId = null) {
-        if (!svgLinesContainer || !skillCardsContainer) return;
-        svgLinesContainer.innerHTML = ''; // 既存の線をクリア
-        drawnLines.clear(); // 描画済みセットもクリア
-
-        if (!activeCardId) return; // アクティブなカードがない場合は線を描画しない
-
-        const activeSkill = skillsData.find(s => s.id === activeCardId);
-        if (!activeSkill || !activeSkill.relatedSkills) return;
-
-        const activeCardElement = Array.from(skillCards).find(card => card.getAttribute('data-id') === activeCardId);
-        if (!activeCardElement) return;
-
-        const pos1 = getCardCenterPosition(activeCardElement, svgLinesContainer);
-
-        activeSkill.relatedSkills.forEach(relatedSkillId => {
-            const relatedCardElement = Array.from(skillCards).find(card => card.getAttribute('data-id') === relatedSkillId);
-            if (relatedCardElement) {
-                const pos2 = getCardCenterPosition(relatedCardElement, svgLinesContainer);
-
-                // 重複描画を防ぐ (id順でキーを作成)
-                const lineKey = [activeCardId, relatedSkillId].sort().join('-');
-                if (drawnLines.has(lineKey)) return;
-
-                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-                line.setAttribute("x1", pos1.x);
-                line.setAttribute("y1", pos1.y);
-                line.setAttribute("x2", pos2.x);
-                line.setAttribute("y2", pos2.y);
-                line.classList.add('skill-link-line');
-
-                // アニメーションのために長さを計算
-                const length = Math.sqrt(Math.pow(pos2.x - pos1.x, 2) + Math.pow(pos2.y - pos1.y, 2));
-                line.style.strokeDasharray = length;
-                line.style.strokeDashoffset = length;
-
-
-                svgLinesContainer.appendChild(line);
-                drawnLines.add(lineKey);
-
-                // 少し遅れて表示アニメーションを開始
-                setTimeout(() => {
-                    line.classList.add('visible');
-                    // 表示アニメーションが完了した後に光るアニメーションを開始
-                    setTimeout(() => {
-                        if (line.classList.contains('visible')) { // まだ表示されているか確認
-                            line.classList.add('glowing');
-                        }
-                    }, 800); // 'visible'のトランジションが0.8sなので、その後に開始
-                }, 100); // 100ms遅延
-            }
-        });
-    }
-
-    const debouncedRedrawLines = debounce(() => {
-        // リサイズ時はアクティブなカードの概念がないため、一旦全てクリアする
-        // もしアクティブな線を維持したい場合は、現在アクティブなカードIDを別途管理する必要がある
-        if (svgLinesContainer) svgLinesContainer.innerHTML = '';
-        drawnLines.clear();
-        // console.log("Lines cleared on resize");
-        // 必要であれば、マウスオーバー中のカードがあればその線だけ再描画するロジックをここに追加できる
-        // 例えば、現在 highlighted クラスがついているカードのIDを取得するなど
-        const hoveredCard = document.querySelector('.skill-card.highlighted-by-hover');
-        if (hoveredCard) {
-            const activeId = hoveredCard.getAttribute('data-id');
-            drawSkillLines(activeId);
-        }
-
-    }, 250);
-
+    // ラインアニメーション関連関数は削除
+    // getCardCenterPosition, drawnLines, drawSkillLines, debouncedRedrawLines
 
     function generateSkillCards(skills) {
         skills.forEach(skill => {
@@ -254,26 +170,15 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     if (skillCardsContainer) {
-        // SVGコンテナを作成してskillCardsContainerの直前に追加
-        svgLinesContainer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        svgLinesContainer.setAttribute("id", "skill-lines-svg");
-        // skillCardsContainerの親要素が存在するか確認
-        if (skillCardsContainer.parentNode) {
-            skillCardsContainer.parentNode.insertBefore(svgLinesContainer, skillCardsContainer);
-        } else {
-            // 親要素がない場合（例：body直下など）、skillCardsContainerの直前に追加できないので代替策
-            // このケースは通常発生しづらいが、念のため。
-            // document.body.insertBefore(svgLinesContainer, document.body.firstChild); // 例
-            console.warn("skillCardsContainer has no parentNode. SVG container might not be placed correctly.");
-        }
-
+        // SVGコンテナ生成処理を削除
+        // svgLinesContainer = document.createElementNS...
 
         generateSkillCards(skillsData);
         // Assign skillCards after they are generated
         skillCards = document.querySelectorAll('.skill-card');
 
-        drawSkillLines(); // 初期描画
-        window.addEventListener('resize', debouncedRedrawLines); // リサイズ時の再描画
+        // drawSkillLines(); // 削除
+        // window.addEventListener('resize', debouncedRedrawLines); // 削除
 
         skillCards.forEach(card => {
             const progressBar = card.querySelector('.progress-bar');
@@ -354,8 +259,8 @@ document.addEventListener('DOMContentLoaded', function(){
                             otherCard.classList.add('dimmed');
                         }
                     });
-                    card.classList.add('highlighted-by-hover'); // マウスオーバー対象をマーク
-                    drawSkillLines(currentSkillId); // アクティブなカードIDを渡して線を描画
+                    card.classList.add('highlighted-by-hover'); // マウスオーバー対象をマーク - これは残しても良い
+                    // drawSkillLines(currentSkillId); // 削除
                 }
             });
 
@@ -364,11 +269,11 @@ document.addEventListener('DOMContentLoaded', function(){
                     otherCard.classList.remove('highlighted');
                     otherCard.classList.remove('dimmed');
                 });
-                card.classList.remove('highlighted-by-hover'); // マークを削除
-                if (svgLinesContainer) {
-                    svgLinesContainer.innerHTML = ''; // マウスが離れたら全ての線をクリア
-                }
-                drawnLines.clear();
+                card.classList.remove('highlighted-by-hover'); // マークを削除 - これは残しても良い
+                // if (svgLinesContainer) { // 削除
+                //     svgLinesContainer.innerHTML = '';
+                // }
+                // drawnLines.clear(); // 削除
             });
         });
 
@@ -472,10 +377,24 @@ document.addEventListener('DOMContentLoaded', function(){
         // 全てmatchMedia内に整理することも可能です。
         // ここでは、matchMediaで条件分岐させたい主要なアニメーション以外（ヒーローの初期ロードなど）を記述します。
 
-        // Hero Section Scroll Animation (Load Animation) - これは全デバイス共通
-        gsap.timeline({ defaults: { duration: 0.8, ease: "power2.out", autoAlpha: 1 } })
-            .from("#hero h1", { y: 50, delay: 0.2 })
-            .from("#hero p", { y: 50,  }, "-=0.5");
+        // Hero Section Animation (Load Animation - ScrollTriggerなし)
+        // これらはページロード時に一度だけ実行され、その後は状態を維持する
+        gsap.from("#hero h1", {
+            duration: 0.8,
+            y: 50,
+            autoAlpha: 1, // opacity: 1, visibility: 'visible' にアニメーション
+            ease: "power2.out",
+            delay: 0.2,
+            clearProps: "transform" // アニメーション後にtransformプロパティをクリアしてCSSに戻す
+        });
+        gsap.from("#hero p", {
+            duration: 0.8,
+            y: 50,
+            autoAlpha: 1,
+            ease: "power2.out",
+            delay: 0.5, // h1より少し遅れて開始
+            clearProps: "transform"
+        });
 
         // Particles.js background scroll animation - これも全デバイス共通だが、値はmatchMediaで調整可能
         gsap.to("#particles-js", {
@@ -599,39 +518,24 @@ document.addEventListener('DOMContentLoaded', function(){
                 });
             }
 
-            // Skill Lines SVG Container and Listeners (Desktop only)
-            if (skillCardsContainer && !document.getElementById('skill-lines-svg')) { // 重複生成防止
-                svgLinesContainer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                svgLinesContainer.setAttribute("id", "skill-lines-svg");
-                if (skillCardsContainer.parentNode) {
-                    skillCardsContainer.parentNode.insertBefore(svgLinesContainer, skillCardsContainer);
-                }
-            }
-            if (skillCards) { // skillCardsが定義されていればイベントリスナーを設定
-                skillCards.forEach(card => {
-                    card.addEventListener('mouseenter', () => {
-                        const currentSkillId = card.getAttribute('data-id');
-                        const currentSkill = skillsData.find(s => s.id === currentSkillId);
-                        if (currentSkill && currentSkill.relatedSkills) {
-                            skillCards.forEach(otherCard => {
-                                const otherSkillId = otherCard.getAttribute('data-id');
-                                if (currentSkill.relatedSkills.includes(otherSkillId)) otherCard.classList.add('highlighted');
-                                else if (otherSkillId !== currentSkillId) otherCard.classList.add('dimmed');
-                            });
-                            card.classList.add('highlighted-by-hover');
-                            if(svgLinesContainer) drawSkillLines(currentSkillId); // svgLinesContainerチェック追加
-                        }
-                    });
-                    card.addEventListener('mouseleave', () => {
-                        skillCards.forEach(otherCard => {
-                            otherCard.classList.remove('highlighted'); otherCard.classList.remove('dimmed');
-                        });
-                        card.classList.remove('highlighted-by-hover');
-                        if (svgLinesContainer) svgLinesContainer.innerHTML = '';
-                        drawnLines.clear();
-                    });
-                });
-            }
+            // Skill Lines SVG Container and Listeners (Desktop only) - 全て削除またはコメントアウト
+            // if (skillCardsContainer && !document.getElementById('skill-lines-svg')) {
+            //     svgLinesContainer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            //     svgLinesContainer.setAttribute("id", "skill-lines-svg");
+            //     if (skillCardsContainer.parentNode) {
+            //         skillCardsContainer.parentNode.insertBefore(svgLinesContainer, skillCardsContainer);
+            //     }
+            // }
+            // if (skillCards) {
+            //     skillCards.forEach(card => {
+            //         card.addEventListener('mouseenter', () => {
+            //             // ... ライン描画関連削除 ...
+            //         });
+            //         card.addEventListener('mouseleave', () => {
+            //             // ... ライン描画関連削除 ...
+            //         });
+            //     });
+            // }
         },
 
         // Mobile (max-width: 767px)
@@ -672,13 +576,12 @@ document.addEventListener('DOMContentLoaded', function(){
                 });
             }
 
-            // Skill Lines - 無効化 (SVGコンテナを隠すか、drawSkillLinesを呼ばない)
-            if (svgLinesContainer) {
-                svgLinesContainer.style.display = 'none';
-            }
-            // マウスエンター/リーブのリスナー内でdrawSkillLinesを呼ばないようにする、
-            // またはdrawSkillLines関数自体をモバイルでは何もしないようにする。
-            // ここではイベントリスナーの登録をデスクトップのみにしているので、モバイルではdrawSkillLinesは呼ばれない。
+            // Skill Lines - 無効化
+            // const svgLinesMobile = document.getElementById('skill-lines-svg'); // idで取得試行
+            // if (svgLinesMobile) { // もし存在していれば非表示に
+            //     svgLinesMobile.style.display = 'none';
+            // }
+            // イベントリスナーはデスクトップ専用なので、ここでは何もしなくて良い
         }
     });
 
