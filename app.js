@@ -378,25 +378,23 @@ document.addEventListener('DOMContentLoaded', function(){
         // ここでは、matchMediaで条件分岐させたい主要なアニメーション以外（ヒーローの初期ロードなど）を記述します。
 
         // Hero Section Animation (Load Animation - ScrollTriggerなし)
-        // これらはページロード時に一度だけ実行され、その後は状態を維持する
+        // clearPropsを削除し、GSAPのデフォルトの挙動（最終状態を維持）に期待
         gsap.from("#hero h1", {
             duration: 0.8,
             y: 50,
-            autoAlpha: 1,
+            autoAlpha: 1, // opacity: 1, visibility: 'visible' にアニメーション
             ease: "power2.out",
-            delay: 0.2,
-            onComplete: () => gsap.set("#hero h1", { clearProps: "transform" }) // autoAlphaで設定されたopacity/visibilityは維持
+            delay: 0.2
         });
         gsap.from("#hero p", {
             duration: 0.8,
             y: 50,
             autoAlpha: 1,
             ease: "power2.out",
-            delay: 0.5,
-            onComplete: () => gsap.set("#hero p", { clearProps: "transform" })
+            delay: 0.5 // h1より少し遅れて開始
         });
 
-        // Particles.js background scroll animation - これも全デバイス共通だが、値はmatchMediaで調整可能
+        // Particles.js background scroll animation - コメントアウト解除
         gsap.to("#particles-js", {
             scrollTrigger: {
                 trigger: "#hero",
@@ -404,8 +402,8 @@ document.addEventListener('DOMContentLoaded', function(){
                 end: "bottom top",
                 scrub: 1,
             },
-            scale: 0.9, // デスクトップ時の値
-            opacity: 0.7, // デスクトップ時の値
+            scale: 0.9,
+            opacity: 0.7,
             ease: "none"
         });
 
@@ -443,7 +441,7 @@ document.addEventListener('DOMContentLoaded', function(){
             // particles.js - デスクトップ設定 (app.js冒頭の初期値が適用される)
             // 必要ならここで値を上書き pJS.particles.number.value = 100; pJS.fn.particlesRefresh();
 
-            // Hero Section Mouse Interaction (Desktop only)
+            // Hero Section Mouse Interaction (Desktop only) - コメントアウト解除
             const hero = document.getElementById('hero');
             if (hero) {
                 const heroH1 = hero.querySelector('h1');
