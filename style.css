@@ -470,57 +470,18 @@ html { /* または body や特定のスクロール可能な要素 */
 }
 
 /* --- SVGラインコンテナスタイル --- */
-#skill-lines-svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0; /* スキルカードの背面 */
-    pointer-events: none; /* マウスイベントを透過させる */
-    overflow: visible; /* SVG要素がはみ出す場合も表示 */
-}
+/* #skill-lines-svg スタイル削除 */
 
 /* --- スキルリンク線の基本スタイル --- */
-.skill-link-line {
-    stroke: rgba(0, 123, 255, 0.4); /* 半透明のアクセントカラー (少し濃く) */
-    stroke-width: 2px;
-    stroke-linecap: round;
-    /* stroke-dashoffset のトランジションを追加 */
-    transition: stroke-dashoffset 0.8s cubic-bezier(0.47, 0, 0.745, 0.715), /* 伸びるアニメーション */
-                stroke-opacity 0.5s ease,
-                opacity 0.5s ease;
-    opacity: 0.7; /* 初期透明度を少し上げておく */
-    /* stroke-dasharray はJSで動的に設定 */
-    /* stroke-dashoffset はJSで動的に設定 (初期は線長と同じ) */
-}
+/* .skill-link-line スタイル削除 */
 
 /* アニメーションで線を表示するためのクラス */
-.skill-link-line.visible {
-    stroke-dashoffset: 0 !important; /* 線を表示 (重要度を上げる) */
-    opacity: 0.7; /* 表示時の基本透明度 */
-}
+/* .skill-link-line.visible スタイル削除 */
 
 /* 光るアニメーション */
-@keyframes glowing-line-anim {
-    0% {
-        stroke-opacity: 0.7;
-        stroke: rgba(0, 150, 255, 0.7);
-    }
-    50% {
-        stroke-opacity: 1;
-        stroke: rgba(100, 200, 255, 1); /* 明るい色 */
-        /* stroke-width: 2.5px; */ /* 太さを少し変えるのもあり */
-    }
-    100% {
-        stroke-opacity: 0.7;
-        stroke: rgba(0, 150, 255, 0.7);
-    }
-}
+/* @keyframes glowing-line-anim スタイル削除 */
 
-.skill-link-line.glowing {
-    animation: glowing-line-anim 1.5s infinite ease-in-out;
-}
+/* .skill-link-line.glowing スタイル削除 */
 
 /* --- コンタクトセクションスタイル --- */
 #contact {
