@@ -379,18 +379,20 @@ html { /* または body や特定のスクロール可能な要素 */
 }
 */
 
-/* --- スキルカードハイライトスタイル --- */
+/* --- スキルカードハイライトスタイル (新仕様) --- */
 .skill-card.highlighted {
-    opacity: 1 !important;
-    border: 1px solid #00ffff;
-    transform: translateY(-5px) scale(1.03); /* 少し拡大して目立たせる */
-    box-shadow: 0 8px 40px rgba(0, 255, 255, 0.3); /* より目立つ影 */
+    opacity: 1 !important; /* opacityはGSAP初期化と競合する可能性があるので!importantは慎重に。GSAP側で制御推奨 */
+    transform: translateY(-6px) scale(1.04); /* 少し大きく、より上に */
+    box-shadow: 0 10px 35px rgba(0, 123, 255, 0.45); /* アクセントカラーで強めの影 */
+    border-color: #007bff; /* アクセントカラーのボーダー */
+    z-index: 10; /* 他のカードより手前に表示 */
 }
 
 .skill-card.dimmed {
-    opacity: 0.5 !important; /* 透明度を下げる */
-    filter: grayscale(50%); /* 少しグレーアウトする */
-    transform: scale(0.95); /* 少し縮小する */
+    opacity: 0.6 !important; /* GSAP初期化との競合考慮 */
+    filter: grayscale(40%); /* グレーアウトを少し抑えめに */
+    transform: scale(0.97); /* 縮小を少し抑えめに */
+    /* box-shadow: none; /* 影を消すか、控えめに */
 }
 
 
